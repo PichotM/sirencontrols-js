@@ -35,8 +35,7 @@ class SirenClass {
 
 	checkForSilentSirens() {
 		for (let index = 0; index < 64; index++) {
-			if (NetworkIsPlayerActive(index))
-			{
+			if (NetworkIsPlayerActive(index)) {
 				const playerVeh = GetVehiclePedIsUsing(GetPlayerPed(index));
 				if (playerVeh) {
 					if (IsVehicleSirenOn(playerVeh)) {
