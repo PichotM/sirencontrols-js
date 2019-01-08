@@ -33,16 +33,23 @@ class SirenClass {
         return DecorGetBool(vehicle || this.playerVehicle, DecorBlip);
     }
 
-    checkForSilentSirens() {
-        for (let index = 0; index < NetworkGetNumConnectedPlayers(); index++) {
-            const playerVeh = GetVehiclePedIsUsing(GetPlayerPed(index));
-            if (playerVeh && IsVehicleSirenOn(playerVeh)){
-                DisableVehicleImpactExplosionActivation(playerVeh, this.IsSirenMuted(playerVeh));
-                // if (this.IsAltSirenMuted(playerVeh)) StartVehicleHorn(playerVeh, 1000, HELDDOWN_HASH, false);
-                if (this.IsBlipSirenMuted(playerVeh)) BlipSiren(playerVeh);
-            }
-        }
-    }
+	checkForSilentSirens() {
+		for (let index = 0; index < 64; index++) {
+			if (NetworkIsPlayerActive(index))
+			{
+				const playerVeh = GetVehiclePedIsUsing(GetPlayerPed(index));
+				if (playerVeh) {
+					if (IsVehicleSirenOn(playerVeh)) {
+						DisableVehicleImpactExplosionActivation(playerVeh, this.IsSirenMuted(playerVeh));
+						if (this.IsBlipSirenMuted(playerVeh)) BlipSiren(playerVeh);
+					} else if (DecorGetBool(playerVeh, "Invisible")) {
+						if (!IsEntityVisible(playerVeh)) SetEntityVisible(playerVeh, true, true);
+						SetEntityAlpha(playerVeh, 0);
+					}
+				}
+			}
+		}
+	}
 
     updateInterval() {
         const ped = GetPlayerPed(-1);
